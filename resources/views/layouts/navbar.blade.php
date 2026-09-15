@@ -13,6 +13,12 @@
         @auth
           <li><a>Profile</a></li>
           <li><a>Settings</a></li>
+          <li>
+            <form method="POST" action="{{ route('logout') }}">
+              @csrf
+              <button type="submit">Logout</button>
+            </form>
+          </li>
         @endauth
       </ul>
     </div>
@@ -26,13 +32,19 @@
       @auth
         <li><a>Profile</a></li>
         <li><a>Settings</a></li>
+        <li>
+          <form method="POST" action="{{ route('logout') }}">
+            @csrf
+            <button type="submit">Logout</button>
+          </form>
+        </li>
       @endauth
     </ul>
   </div>
 
   @guest
     <div>
-      <a class="btn">SIGN IN</a>
+      <a href="{{ route('signin') }}" class="btn">SIGN IN</a>
     </div>
   @endguest
 </nav>
