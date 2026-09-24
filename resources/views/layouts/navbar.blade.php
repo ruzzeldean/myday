@@ -11,7 +11,7 @@
       <ul tabindex="-1" class="menu menu-sm dropdown-content bg-base-100 rounded-box z-1 mt-3 w-52 p-2 shadow">
         <li><a href="{{ route('explore') }}">Explore</a></li>
         @auth
-          <li><a>Profile</a></li>
+          <li><a href="{{ route('profile.index') }}">Profile</a></li>
           <li><a>Settings</a></li>
           <li>
             <form method="POST" action="{{ route('logout') }}">
@@ -30,7 +30,7 @@
     <ul class="menu menu-horizontal px-1">
       <li><a href="{{ route('explore') }}">Explore</a></li>
       @auth
-        <li><a>Profile</a></li>
+        <li><a href="{{ route('profile.index') }}">Profile</a></li>
         <li><a>Settings</a></li>
         <li>
           <form method="POST" action="{{ route('logout') }}">

@@ -95,6 +95,7 @@ h6 {
 }
 
 #app-wrapper {
+    width: 100%;
     min-height: 100vh;
     min-height: 100dvh;
     display: grid;
@@ -103,4 +104,10 @@ h6 {
 
 .input {
     outline: none !important;
+}
+
+textarea {
+    resize: none !important;
+    field-sizing: content !important;
+    max-height: 20em !important;
 }

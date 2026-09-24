@@ -13,13 +13,13 @@ form.addEventListener('submit', async (event) => {
 
     let isValid = true;
 
-    const name = document.getElementById('name').value;
+    const name = document.getElementById('name').value.trim();
     const namehint = document.getElementById('name-hint');
 
-    const username = document.getElementById('username').value;
+    const username = document.getElementById('username').value.trim();
     const usernamehint = document.getElementById('username-hint');
 
-    const email = document.getElementById('email').value;
+    const email = document.getElementById('email').value.trim();
     const emailhint = document.getElementById('email-hint');
 
     const password_input = document.getElementById('password');
@@ -134,9 +134,8 @@ form.addEventListener('submit', async (event) => {
 
             submitBtn.innerHTML = `<span class="loading loading-spinner loading-xs"></span> Redirecting...`;
 
-            setTimeout(() => {
-                window.location.href = '/explore';
-            }, 3000);
+            window.location.href = '/explore';
+
             return;
         }
     } catch (error) {

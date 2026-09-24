@@ -12,6 +12,7 @@ use Illuminate\Database\Eloquent\Attributes\Hidden;
 use Illuminate\Database\Eloquent\Attributes\RouteKey;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
@@ -37,10 +38,17 @@ class User extends Authenticatable
         ];
     }
 
+    // Automatically lowercase the username when set
     protected function username(): Attribute
     {
         return Attribute::make(
             set: fn ($value) => strtolower($value),
         );
+    }
+
+    // User to Post model eloquent relationship
+    public function posts(): HasMany
+    {
+        return $this->hasMany(Post::class);
     }
 }
