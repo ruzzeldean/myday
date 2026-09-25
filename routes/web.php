@@ -14,3 +14,4 @@ Route::get('/signup', fn () => view('auth.signup'))->name('signup')->middleware(
 Route::get('/profile', [ProfileController::class, 'index'])->name('profile.index')->middleware('auth');
 
 Route::post('/post', [PostController::class, 'store'])->name('post.create')->middleware('auth');
+Route::get('/post/{post:uuid}', [PostController::class, 'show'])->name('post.show');

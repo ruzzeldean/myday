@@ -48,7 +48,10 @@ class PostController extends Controller
      */
     public function show(Post $post)
     {
-        //
+        // eager load user
+        $post->load('user');
+
+        return view('posts.show', compact('post'));
     }
 
     /**

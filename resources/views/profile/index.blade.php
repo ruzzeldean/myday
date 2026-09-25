@@ -25,10 +25,10 @@
     @if ($posts->count())
       <div class="grid md:grid-cols-2 lg:grid-cols-2 gap-x-10 gap-y-6 mt-6">
         @foreach ($posts as $post)
-          <a class="flex flex-col">
-            <figure class="flex-1" title="Post Title">
+          <a href="{{ route('post.show', $post->uuid) }}" class="flex flex-col">
+            <figure class="flex-1" title="{{ $post->title }}">
               <img src="{{ asset('storage/' . $post->image) }}" alt="{{ $post->title }}"
-                class="md:rounded-2xl aspect-4/3 object-cover w-full h-full" loading="lazy" />
+                class="md:rounded-4xl aspect-4/3 object-cover w-full h-full" loading="lazy" />
             </figure>
 
             <div class="p-3 md:px-0 flex justify-between gap-3 text-lg">
@@ -91,7 +91,7 @@
       {{-- Modal Action Buttons --}}
       <div class="modal-action">
         <form method="dialog" class="space-x-2">
-          <button type="submit" form="create-post-form" id="submit-btn" class="btn btn-primary">Submit</button>
+          <button type="submit" form="create-post-form" id="submit-btn" class="btn btn-primary">Create</button>
           <button class="btn">Close</button>
         </form>
       </div>
