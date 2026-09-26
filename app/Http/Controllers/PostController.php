@@ -5,9 +5,10 @@ declare(strict_types=1);
 namespace App\Http\Controllers;
 
 use App\Http\Requests\Post\StorePostRequest;
+use App\Http\Requests\Post\UpdatePostRequest;
 use App\Models\Post;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class PostController extends Controller
 {
@@ -65,9 +66,27 @@ class PostController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Post $post)
+    public function update(UpdatePostRequest $request, Post $post): JsonResponse
     {
-        //
+        $validated = $request->validated();
+
+        if ($request->hasFile('image')) {
+            $oldImage = $post->image;
+
+            $validated['image'] = $request->file('image')->store('posts', 'public');
+
+            $post->update($validated);
+
+            if ($oldImage && Storage::disk('public')->exists($oldImage)) {
+                Storage::disk('public')->delete($oldImage);
+            }
+        } else {
+            unset($validated['image']);
+
+            $post->update($validated);
+        }
+
+        return response()->json(['message' => 'Post updated.'], 200);
     }
 
     /**

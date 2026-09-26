@@ -7,14 +7,14 @@ namespace App\Http\Requests\Post;
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
 
-class StorePostRequest extends FormRequest
+class UpdatePostRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
      */
     public function authorize(): bool
     {
-        return $this->user !== null;
+        return $this->user() !== null;
     }
 
     /**
@@ -26,7 +26,7 @@ class StorePostRequest extends FormRequest
     {
         return [
             'title' => ['required', 'string', 'min:2', 'max:255'],
-            'image' => ['required', 'image', 'mimes:jpeg,jpg,png', 'max:8192'],
+            'image' => ['nullable', 'image', 'mimes:jpeg,jpg,png', 'max:8192'],
             'content' => ['nullable', 'string', 'max:1000'],
         ];
     }
