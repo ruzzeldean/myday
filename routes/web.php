@@ -16,3 +16,4 @@ Route::get('/profile', [ProfileController::class, 'index'])->name('profile.index
 Route::post('/post', [PostController::class, 'store'])->name('post.create')->middleware('auth');
 Route::get('/post/{post:uuid}', [PostController::class, 'show'])->name('post.show');
 Route::put('/post/{post:uuid}', [PostController::class, 'update'])->name('post.update')->middleware('auth');
+Route::delete('/post/{post:uuid}', [PostController::class, 'destroy'])->name('post.destroy')->middleware('auth');

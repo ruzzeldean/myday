@@ -22,6 +22,8 @@
   </div>
 
   @stack('scripts')
+
+  <x-alert-success />
 </body>
 
 </html>

@@ -7,6 +7,8 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Override;
 use Spatie\Sluggable\HasSlug;
@@ -15,7 +17,7 @@ use Spatie\Sluggable\SlugOptions;
 #[Fillable(['title', 'image', 'content'])]
 class Post extends Model
 {
-    use HasSlug;
+    use HasSlug, SoftDeletes;
 
     // UUID-based post slug generation
     #[Override]
@@ -31,5 +33,16 @@ class Post extends Model
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
+    }
+
+    // Delete image when force deleting
+    #[Override]
+    protected static function booted()
+    {
+        static::forceDeleted(function (Post $post) {
+            if ($post->image) {
+                Storage::disk('public')->delete($post->image);
+            }
+        });
     }
 }

@@ -8,7 +8,7 @@
       <div class="space-x-2">
         <button onclick="edit_post.showModal()" class="btn btn-sm btn-soft">Edit</button>
 
-        <button class="btn btn-sm btn-error btn-soft">Delete</button>
+        <button onclick="delete_post.showModal()" class="btn btn-sm btn-error btn-soft">Delete</button>
       </div>
     </div>
 
@@ -43,8 +43,8 @@
     <div class="modal-box">
       <h3 class="text-lg font-bold">Edit Post</h3>
       {{-- Edit Post Form --}}
-      <form action="{{ route('post.update', $post->uuid) }}" method="POST" enctype="multipart/form-data" id="edit-post-form"
-        class="mt-3 space-y-3">
+      <form action="{{ route('post.update', $post->uuid) }}" method="POST" enctype="multipart/form-data"
+        id="edit-post-form" class="mt-3 space-y-3">
         @csrf
         @method('PUT')
 
@@ -85,4 +85,23 @@
       </div>
     </div>
   </dialog>
+
+  {{-- Delete Post Modal --}}
+  <dialog id="delete_post" class="modal">
+    <div class="modal-box">
+      <h3 class="text-lg font-bold">Confirm Deletion</h3>
+      <p class="py-4">Are you sure you want to delete this post?</p>
+      <div class="modal-action">
+        <form method="dialog" class="space-x-2">
+          <button class="btn">Cancel</button>
+          <button class="btn btn-error btn-outline" form="delete-post-form">Yes, DELETE</button>
+        </form>
+      </div>
+    </div>
+  </dialog>
+
+  <form action="{{ route('post.destroy', $post->uuid) }}" method="POST" id="delete-post-form">
+    @csrf
+    @method('DELETE')
+  </form>
 </x-app-layout>
