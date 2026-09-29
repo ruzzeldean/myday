@@ -10,15 +10,18 @@ use App\Models\Post;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\View\View;
 
 class PostController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(): View
     {
-        //
+        $posts = Post::latest()->paginate(10);
+
+        return view('posts.explore', compact('posts'));
     }
 
     /**
@@ -42,13 +45,13 @@ class PostController extends Controller
 
         $request->user()->posts()->create($validated);
 
-        return response()->json(['message' => 'Post created.'], 201);
+        return response()->json(['message' => 'Post successfully created.'], 201);
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(Post $post)
+    public function show(Post $post): View
     {
         // eager load user
         $post->load('user');
@@ -87,7 +90,7 @@ class PostController extends Controller
             $post->update($validated);
         }
 
-        return response()->json(['message' => 'Post updated.'], 200);
+        return response()->json(['message' => 'Post successfully updated.'], 200);
     }
 
     /**
@@ -100,14 +103,14 @@ class PostController extends Controller
         return redirect()->route('profile.index')->with('success', 'Post successfully deleted.');
     }
 
-    public function trashed()
+    public function trashed(): View
     {
         $posts = Post::onlyTrashed()->where('user_id', auth()->id())->latest('deleted_at')->get();
 
         return view('posts.trashed', compact('posts'));
     }
 
-    public function showTrashed(Post $post)
+    public function showTrashed(Post $post): View
     {
         abort_unless($post->user_id === auth()->id(), 404);
 
@@ -123,7 +126,7 @@ class PostController extends Controller
         return redirect()->route('post.trashed')->with('success', 'Post successfully restored.');
     }
 
-    public function forceDestroy(string $uuid)
+    public function forceDestroy(string $uuid): RedirectResponse
     {
         $post = Post::onlyTrashed()->where('uuid', $uuid)->firstOrFail();
 

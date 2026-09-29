@@ -29,7 +29,7 @@
     </div>
 
     <div class="flex items-center gap-3 mt-6 px-3 md:px-0">
-      <a href="{{ route('profile.index') }}" class="flex items-center gap-2">
+      <a href="{{ route('profile.show', $post->user->username) }}" class="flex items-center gap-2">
         <img
           src="https://images.unsplash.com/photo-1778110827897-6dc6b6f7c988?q=80&w=1976&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
           alt="Profile Picture" class="rounded-full aspect-square object-cover max-w-10 h-auto">

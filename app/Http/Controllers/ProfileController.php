@@ -6,14 +6,16 @@ namespace App\Http\Controllers;
 
 use App\Models\Post;
 use App\Models\User;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\View\View;
 
 class ProfileController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(): View
     {
         $user = auth()->user();
         $posts = Post::where('user_id', $user->id)->latest()->paginate(10);
@@ -40,9 +42,16 @@ class ProfileController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(User $user)
+    public function show(string $username): RedirectResponse|View
     {
-        //
+        if (auth()->check() && auth()->user()->username === $username) {
+            return redirect()->route('profile.index');
+        }
+
+        $user = User::where('username', $username)->firstOrFail();
+        $posts = Post::where('user_id', $user->id)->latest()->paginate(10);
+
+        return view('profile.index', compact('user', 'posts'));
     }
 
     /**
