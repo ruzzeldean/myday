@@ -99,4 +99,36 @@ class PostController extends Controller
 
         return redirect()->route('profile.index')->with('success', 'Post successfully deleted.');
     }
+
+    public function trashed()
+    {
+        $posts = Post::onlyTrashed()->where('user_id', auth()->id())->latest('deleted_at')->get();
+
+        return view('posts.trashed', compact('posts'));
+    }
+
+    public function showTrashed(Post $post)
+    {
+        abort_unless($post->user_id === auth()->id(), 404);
+
+        return view('posts.show', compact('post'));
+    }
+
+    public function restore(string $uuid): RedirectResponse
+    {
+        $post = Post::onlyTrashed()->where('uuid', $uuid)->firstOrFail();
+
+        $post->restore();
+
+        return redirect()->route('post.trashed')->with('success', 'Post successfully restored.');
+    }
+
+    public function forceDestroy(string $uuid)
+    {
+        $post = Post::onlyTrashed()->where('uuid', $uuid)->firstOrFail();
+
+        $post->forceDelete();
+
+        return redirect()->route('post.trashed')->with('success', 'Post permanently deleted.');
+    }
 }

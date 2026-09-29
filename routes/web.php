@@ -13,7 +13,13 @@ Route::get('/signup', fn () => view('auth.signup'))->name('signup')->middleware(
 
 Route::get('/profile', [ProfileController::class, 'index'])->name('profile.index')->middleware('auth');
 
+Route::get('/post/trashed', [PostController::class, 'trashed'])->name('post.trashed')->middleware('auth');
+
 Route::post('/post', [PostController::class, 'store'])->name('post.create')->middleware('auth');
 Route::get('/post/{post:uuid}', [PostController::class, 'show'])->name('post.show');
 Route::put('/post/{post:uuid}', [PostController::class, 'update'])->name('post.update')->middleware('auth');
-Route::delete('/post/{post:uuid}', [PostController::class, 'destroy'])->name('post.destroy')->middleware('auth');
+Route::patch('/post/{post:uuid}', [PostController::class, 'destroy'])->name('post.destroy')->middleware('auth');
+
+Route::get('/post/trashed/{post:uuid}', [PostController::class, 'showTrashed'])->withTrashed()->name('post.showTrashed')->middleware('auth');
+Route::patch('/post/trashed/{post:uuid}', [PostController::class, 'restore'])->name('post.restore')->middleware('auth');
+Route::delete('/post/trashed/{post:uuid}', [PostController::class, 'forceDestroy'])->name('post.forceDestroy')->middleware('auth');

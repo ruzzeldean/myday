@@ -17,7 +17,7 @@
       <div class="mt-6 space-x-3">
         <a class="btn">Edit Profile</a>
 
-        <a class="btn">View Trash</a>
+        <a href="{{ route('post.trashed') }}" class="btn">View Trash</a>
       </div>
     </div>
 
