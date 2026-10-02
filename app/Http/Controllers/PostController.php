@@ -37,6 +37,8 @@ class PostController extends Controller
      */
     public function store(StorePostRequest $request): JsonResponse
     {
+        $this->authorize('create', Post::class);
+
         $validated = $request->validated();
 
         if ($request->hasFile('image')) {
@@ -72,6 +74,8 @@ class PostController extends Controller
      */
     public function update(UpdatePostRequest $request, Post $post): JsonResponse
     {
+        $this->authorize('update', $post);
+
         $validated = $request->validated();
 
         if ($request->hasFile('image')) {
@@ -98,6 +102,8 @@ class PostController extends Controller
      */
     public function destroy(Post $post): RedirectResponse
     {
+        $this->authorize('delete', $post);
+
         $post->delete();
 
         return redirect()->route('profile.index')->with('success', 'Post successfully deleted.');
@@ -120,6 +126,8 @@ class PostController extends Controller
     public function restore(string $uuid): RedirectResponse
     {
         $post = Post::onlyTrashed()->where('uuid', $uuid)->firstOrFail();
+
+        $this->authorize('restore', $post);
 
         $post->restore();
 

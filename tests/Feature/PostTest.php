@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Post;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\UploadedFile;
@@ -44,7 +45,7 @@ it('rejects invalid input', function () {
         ->assertSessionHasErrors('title');
 });
 
-/* it("forbids editing another user's post", function () {
+it("forbids editing another user's post", function () {
     $post = Post::factory()->create();
     $other = User::factory()->create();
 
@@ -53,4 +54,4 @@ it('rejects invalid input', function () {
         ->assertForbidden();
 
     expect($post->fresh()->title)->not->toBe('Hacked');
-}); */
+});

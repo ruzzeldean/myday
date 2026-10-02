@@ -13,12 +13,16 @@
         <p>{{ '@' . $user->username }}</p>
       </div>
 
-      {{-- Action Buttons --}}
-      <div class="mt-6 space-x-3">
-        <a class="btn">Edit Profile</a>
+      @auth
+        @if (auth()->id() === $user->id)
+          {{-- Action Buttons --}}
+          <div class="mt-6 space-x-3">
+            <a class="btn">Edit Profile</a>
 
-        <a href="{{ route('post.trashed') }}" class="btn">View Trash</a>
-      </div>
+            <a href="{{ route('post.trashed') }}" class="btn">View Trash</a>
+          </div>
+        @endif
+      @endauth
     </div>
 
     {{-- Posts --}}
@@ -46,59 +50,64 @@
     @endif
   </div>
 
-  {{-- Create Post Button --}}
-  <button class="btn btn-circle w-15 h-15 fixed bottom-5 right-5" onclick="create_post.showModal()">
-    <x-icons.pen-line />
-  </button>
+  @auth
+    @if (auth()->id() === $user->id)
+      {{-- Create Post Button --}}
+      <button class="btn btn-circle w-15 h-15 fixed bottom-5 right-5" onclick="create_post.showModal()">
+        <x-icons.pen-line />
+      </button>
 
-  {{-- Create Post Modal --}}
-  <dialog id="create_post" class="modal">
-    <div class="modal-box">
-      <h3 class="text-lg font-bold">Create Post</h3>
-      {{-- Create Post Form --}}
-      <form action="{{ route('post.create') }}" method="POST" enctype="multipart/form-data" id="create-post-form"
-        class="mt-3 space-y-3">
-        @csrf
 
-        <div class="space-y-2">
-          <x-input-label for="title" value="Title" />
-          <x-text-input type="text" name="title" id="title" class="validator" placeholder="Enter title"
-            minlength="2" maxlength="255" autofocus required />
-          <x-input-hint for="title" value="Title must be at least 2 characters long." />
+      {{-- Create Post Modal --}}
+      <dialog id="create_post" class="modal">
+        <div class="modal-box">
+          <h3 class="text-lg font-bold">Create Post</h3>
+          {{-- Create Post Form --}}
+          <form action="{{ route('post.create') }}" method="POST" enctype="multipart/form-data" id="create-post-form"
+            class="mt-3 space-y-3">
+            @csrf
+
+            <div class="space-y-2">
+              <x-input-label for="title" value="Title" />
+              <x-text-input type="text" name="title" id="title" class="validator" placeholder="Enter title"
+                minlength="2" maxlength="255" autofocus required />
+              <x-input-hint for="title" value="Title must be at least 2 characters long." />
+            </div>
+
+            <div class="space-y-2">
+              <x-input-label for="image" value="Image" />
+              <x-file-input name="image" id="image" class="validator" accept="image/jpeg,image/png" required />
+              <x-input-hint for="image" value="Image is required." />
+            </div>
+
+            <div class="space-y-2">
+              <x-input-label for="content" value="Content" />
+              <textarea name="content" id="content" class="textarea w-full focus:border-indigo-500 focus:outline-0" maxlength="1000"
+                placeholder="Enter content... (maximum of 1,000 characters)"></textarea>
+            </div>
+          </form>
+
+          <div role="alert" id="server-message" class="alert alert-soft mt-5 hidden">
+            <ul id="error-list" class="list-disc list-inside hidden">
+            </ul>
+
+            <x-icons.circle-check class="success-message hidden" />
+            <span id="success-server-message" class="success-message hidden"></span>
+          </div>
+
+          {{-- Modal Action Buttons --}}
+          <div class="modal-action">
+            <form method="dialog" class="space-x-2">
+              <button type="submit" form="create-post-form" id="submit-btn" class="btn btn-primary">Create</button>
+              <button class="btn">Close</button>
+            </form>
+          </div>
         </div>
+      </dialog>
 
-        <div class="space-y-2">
-          <x-input-label for="image" value="Image" />
-          <x-file-input name="image" id="image" class="validator" accept="image/jpeg,image/png" required />
-          <x-input-hint for="image" value="Image is required." />
-        </div>
-
-        <div class="space-y-2">
-          <x-input-label for="content" value="Content" />
-          <textarea name="content" id="content" class="textarea w-full focus:border-indigo-500 focus:outline-0" maxlength="1000"
-            placeholder="Enter content... (maximum of 1,000 characters)"></textarea>
-        </div>
-      </form>
-
-      <div role="alert" id="server-message" class="alert alert-soft mt-5 hidden">
-        <ul id="error-list" class="list-disc list-inside hidden">
-        </ul>
-
-        <x-icons.circle-check class="success-message hidden" />
-        <span id="success-server-message" class="success-message hidden"></span>
-      </div>
-
-      {{-- Modal Action Buttons --}}
-      <div class="modal-action">
-        <form method="dialog" class="space-x-2">
-          <button type="submit" form="create-post-form" id="submit-btn" class="btn btn-primary">Create</button>
-          <button class="btn">Close</button>
-        </form>
-      </div>
-    </div>
-  </dialog>
-
-  @push('scripts')
-    @vite('resources/js/post/create-post.js')
-  @endpush
+      @push('scripts')
+        @vite('resources/js/post/create-post.js')
+      @endpush
+    @endif
+  @endauth
 </x-app-layout>
